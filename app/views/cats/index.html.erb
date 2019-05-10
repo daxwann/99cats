@@ -1,5 +1,5 @@
 <ul>
   <% @cats.each do |kitty| %>
-  <%= render "kitty", kitty: kitty %>
+  <%= render "kitty", kitty: kitty, show_link: cat_url(kitty)%>
   <% end %>
 </ul>

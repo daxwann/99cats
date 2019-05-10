@@ -1,0 +1,28 @@
+<form action="<%= cats_url(@kitty) %>" method="POST">
+  <div>
+    <label for="name">Name</label>
+    <input type="text" name="cat[name]" id="name"> 
+  </div>
+
+  <div>
+    <p>Sex</p>
+    <div>
+      <input type="radio" id="sex_f" name="cat[sex]" value="F">
+      <label for="sex_f">Female</label>
+    </div>
+    <div>
+      <input type="radio" id="sex_m" name="cat[sex]" value="M">
+      <label for="sex_m">Male</label>
+    </div>
+  </div>
+
+  <div>
+    <label for="birth_date">Birth Date</label>
+    <input type="date" name="cat[birth_date]" id="birth_date">
+  </div>
+
+  <div>
+    <label for="description">Description</label>
+    <textarea id="description" name="cat[description]"></textarea>
+  </div>
+</form>
