@@ -11,4 +11,8 @@ ActiveRecord::Base.transaction do
   Cat.create!(name: "Stella", birth_date: "2018-01-03", sex: "F", color: "black", description: "Sassy and fast")
   Cat.create!(name: "Hubert", birth_date: "2016-04-19", sex: "M", color: "brown", description: "Loves food")
   Cat.create!(name: "Zeus", birth_date: "2019-02-28", sex: "M", color: "white", description: "Likes to run")
+  CatRentalRequest.create!(cat_id: 1, start_date: "2019-05-20", end_date: "2019-08-20", status: "APPROVED")
+  CatRentalRequest.create!(cat_id: 2, start_date: "2019-05-20", end_date: "2019-06-20")
+  CatRentalRequest.create!(cat_id: 3, start_date: "2019-06-20", end_date: "2019-07-20", status: "DENIED")
+  CatRentalRequest.create!(cat_id: 4, start_date: "2019-06-01", end_date: "2019-08-09", status: "APPROVED")
 end
