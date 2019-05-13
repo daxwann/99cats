@@ -1,5 +1,7 @@
-<form action="<%= action == :new ? cats_url : cat_url(kitty) %>" method="POST">
-  <% if action == :edit %>
+<% cat_exist = kitty.persisted? %>
+
+<form action="<%= cat_exist ? cat_url(kitty) : cats_url %>" method="POST">
+  <% if cat_exist  %>
     <input type="hidden" name="_method" value="PATCH">
   <% end %>
   <div>
@@ -41,6 +43,6 @@
     </textarea>
   </div>
   <div>
-    <input type="submit" value="<%= action == :new ? 'Add New Cat' : 'Update Cat'%>">
+    <input type="submit" value="<%= cat_exist ? 'Update Cat' : 'Add New Cat'%>">
   </div>
 </form>
