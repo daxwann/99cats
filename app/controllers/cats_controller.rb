@@ -5,9 +5,9 @@ class CatsController < ApplicationController
   end
 
   def show
-    @kitty = Cat.find_by(id: params[:id])
+    @cat = Cat.find_by(id: params[:id])
 
-    if @kitty
+    if @cat
       render :show 
     else
       redirect_to books_url
@@ -15,29 +15,33 @@ class CatsController < ApplicationController
   end
 
   def new
-    @kitty = Cat.new
+    @cat = Cat.new
     render :new
   end
   
   def create
-    @kitty = Cat.new(cat_params)
+    @cat = Cat.new(cat_params)
     
-    if @kitty.save
-      redirect_to cat_url(@kitty)
+    if @cat.save
+      redirect_to cat_url(@cat)
     else
       render :new
     end
   end
 
   def edit
-    @kitty = Cat.find_by(id: params[:id])
-    render :edit
+    @cat = Cat.find_by(id: params[:id])
+    if @cat
+      render :edit
+    else
+      redirect_to cats_url
+    end
   end
 
   def update
-    @kitty = Cat.find_by(id: params[:id])
-    if @kitty.update_attributes(cat_params)
-      redirect_to cat_url(@kitty)
+    @cat = Cat.find_by(id: params[:id])
+    if @cat.update_attributes(cat_params)
+      redirect_to cat_url(@cat)
     else
       render :edit
     end
