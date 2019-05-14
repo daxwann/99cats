@@ -1,0 +1,14 @@
+<% request_exist = request.persisted? %>
+
+<form action="<%= request_exist ? cat_rental_request_url(request) : cat_rental_requests_url %>" method="POST">
+  <% if request_exist %>
+    <input type="hidden" name="_method" value="PATCH">
+  <% end %>
+
+  <div>
+    <select id="cat" name="request[cat_id]">
+        
+    </select>
+  </div>
+</form>
+

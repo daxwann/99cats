@@ -47,6 +47,12 @@ class CatsController < ApplicationController
     end
   end
 
+  def destroy
+    @cat = Cat.find_by(id: params[:id])
+
+    @cat.destroy
+  end
+
   private
 
   def cat_params
