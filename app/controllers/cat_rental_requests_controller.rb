@@ -1,6 +1,7 @@
 class CatRentalRequestsController < ApplicationController
   def new
     @request = CatRentalRequest.new
+    @cats = Cat.all
 
     render :new
   end
@@ -17,6 +18,7 @@ class CatRentalRequestsController < ApplicationController
 
   def edit
     @request = CatRentalRequest.find_by(id: params[:id])
+    @cats = Cat.all
     
     render :edit
   end

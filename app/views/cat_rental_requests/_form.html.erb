@@ -6,9 +6,17 @@
   <% end %>
 
   <div>
+    <label for="cat">Cat</label>
     <select id="cat" name="request[cat_id]">
-        
+      <option disabled <%= "selected" unless params[:cat_id] || request_exist %>>--Select Cat--</option>
+      <% cats.each do |cat| %>
+        <option value="<%= cat.id %>" <%= "selected" if params[:cat_id] == cat.id || request.cat_id == cat.id %>> cat.name </option>
+      <% end %>
     </select>
   </div>
+
+  <div>
+    <label for="start_date">Start Date</label>
+    <input type="date" value="<%= 
 </form>
 
