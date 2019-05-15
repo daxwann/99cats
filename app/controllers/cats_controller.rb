@@ -10,7 +10,7 @@ class CatsController < ApplicationController
     if @cat
       render :show 
     else
-      redirect_to books_url
+      redirect_to cats_url
     end
   end
 

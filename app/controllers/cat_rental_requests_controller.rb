@@ -16,6 +16,20 @@ class CatRentalRequestsController < ApplicationController
       render :new
     end
   end
+
+  def approve
+    @request = CatRentalRequest.find_by(id: params[:id])
+
+    @request.approve!
+    redirect_to cat_url(@request.cat_id)
+  end
+
+  def deny
+    @request = CatRentalRequest.find_by(id: params[:id])
+
+    @request.deny!
+    redirect_to cat_url(@request.cat_id)
+  end
 =begin
   def edit
     @request = CatRentalRequest.find_by(id: params[:id])
