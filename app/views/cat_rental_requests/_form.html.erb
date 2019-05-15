@@ -10,13 +10,21 @@
     <select id="cat" name="request[cat_id]">
       <option disabled <%= "selected" unless params[:cat_id] || request_exist %>>--Select Cat--</option>
       <% cats.each do |cat| %>
-        <option value="<%= cat.id %>" <%= "selected" if params[:cat_id] == cat.id || request.cat_id == cat.id %>> cat.name </option>
+        <option value="<%= cat.id %>" <%= "selected" if params[:cat_id] == cat.id || request.cat_id == cat.id %>> <%= cat.name %> </option>
       <% end %>
     </select>
   </div>
 
   <div>
     <label for="start_date">Start Date</label>
-    <input type="date" value="<%= 
+    <input type="date" name="request[start_date]" value="<%= request.start_date %>">
+  </div>
+
+  <div>
+    <label for="end_date">End Date</label>
+    <input type="date" name="request[end_date]" value="<%= request.end_date %>">
+  </div>
+
+  <input type="submit" value="<%= request_exist ? "Edit Rental Request" : "New Rental Request" %>">
 </form>
 

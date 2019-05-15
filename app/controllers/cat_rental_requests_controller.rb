@@ -8,14 +8,15 @@ class CatRentalRequestsController < ApplicationController
 
   def create
     @request = CatRentalRequest.new(request_params)
+    @cats = Cat.all
 
     if @request.save
-      redirect_to cat_rental_request_url(@request)
+      redirect_to cat_url(@request.cat_id)
     else
       render :new
     end
   end
-
+=begin
   def edit
     @request = CatRentalRequest.find_by(id: params[:id])
     @cats = Cat.all
@@ -25,6 +26,7 @@ class CatRentalRequestsController < ApplicationController
 
   def update
     @request = CatRentalRequest.find_by(id: params[:id]) 
+    @cats = Cat.all
 
     if @request.update_attributes(request_params)
       redirect_to cat_rental_request_url(@request)
@@ -39,10 +41,10 @@ class CatRentalRequestsController < ApplicationController
     @request.destroy
     redirect_to cat_url(@request.cat_id)
   end
-
+=end
   private
 
   def request_params
-    params.require(:request).permit(:cat_id, :start_id, :end_id, :status)
+    params.require(:request).permit(:cat_id, :start_date, :end_date, :status)
   end
 end

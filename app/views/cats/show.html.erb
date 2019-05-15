@@ -1,3 +1,6 @@
+<% requests = @cat.rental_requests %>
+<% ordered_requests = requests.order('start_date') %>
+
 <h1><%= @cat.name %>
 <table>
   <tr>
@@ -20,4 +23,18 @@
     <td>Sex</td>
     <td><%= @cat.sex %></td>
   </tr>
+</table>
+
+<h2>Rental Requests</h2>
+<table>
+  <tr>
+    <th>Start Date</th>
+    <th>End Date</th>
+  </tr>
+  <% ordered_requests.each do |request| %>
+    <tr>
+      <td><%= request.start_date %></td>
+      <td><%= request.end_date %></td>
+    </tr>
+  <% end %>
 </table>
