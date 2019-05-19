@@ -7,43 +7,40 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 6 }, allow_nil: true
   after_initialize :ensure_session_token
   
-  def self.find_by_credentials(username, password)
-    user = User.find_by(username: username)
+  def self.find_by_credentials(user_params)
+    user = User.find_by(username: user_params[:username])
 
     return nil if user.nil?
       
     password_digest = BCrypt::Password.new(user.password_digest) 
 
-    password_digest.is_password?(password) ? user : nil
+    password_digest.is_password?(user_params[:password]) ? user : nil
   end
 
   def self.generate_session_token
     SecureRandom::urlsafe_base64
   end
 
-  def unique_session_token?
-    unless user.valid?
-
-    end
-    true 
+  def valid_session_token?
+    return true if self.valid?
+    return false if self.errors.include?(:session_token)  
+    true
   end
 
   def reset_session_token!
-    user.session_token = User.generate_session_token
-
-    user.save!
-    user.session_token
+    self.ensure_session_token
+    self.save!
+    self.session_token
   end
 
   def ensure_session_token
-    user.session_token ||= User.generate_session_token
-    if !user.valid? && user.errors.messages[:password_digest].includes("needs to be unique")
-      user.session_token = User.generate_session_token
+    until valid_session_token?
+      self.session_token = User.generate_session_token
     end
   end
 
   def password=(password)
     @password = password
-    user.password_digest = BCrypt::Password.create(password)
+    self.password_digest = BCrypt::Password.create(password)
   end
 end

@@ -15,4 +15,6 @@ ActiveRecord::Base.transaction do
   CatRentalRequest.create!(cat_id: 2, start_date: "2019-05-20", end_date: "2019-06-20")
   CatRentalRequest.create!(cat_id: 3, start_date: "2019-06-20", end_date: "2019-07-20", status: "DENIED")
   CatRentalRequest.create!(cat_id: 4, start_date: "2019-06-01", end_date: "2019-08-09", status: "APPROVED")
+  User.create!(username: "daxwann", password: "password")
+  User.create!(username: "phoebe", password: "starwars")
 end
