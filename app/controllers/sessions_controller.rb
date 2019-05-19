@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  before_action :redirect_user, only: [:new, :create]
+
   def new
     @user = User.new
     render :new
@@ -8,8 +10,7 @@ class SessionsController < ApplicationController
     @user = User.find_by_credentials(session_params)
 
     if @user
-      token = @user.reset_session_token!
-      session[:session_token] = token
+      self.login_user!
       redirect_to cats_url
     else
       render :new

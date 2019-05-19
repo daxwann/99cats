@@ -1,6 +1,8 @@
 <% cat_exist = cat.persisted? %>
 
 <form action="<%= cat_exist ? cat_url(cat) : cats_url %>" method="POST">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
   <% if cat_exist  %>
     <input type="hidden" name="_method" value="PATCH">
   <% end %>

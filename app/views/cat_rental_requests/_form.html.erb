@@ -1,6 +1,8 @@
 <% request_exist = request.persisted? %>
 
 <form action="<%= request_exist ? cat_rental_request_url(request) : cat_rental_requests_url %>" method="POST">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
   <% if request_exist %>
     <input type="hidden" name="_method" value="PATCH">
   <% end %>
