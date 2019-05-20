@@ -1,4 +1,6 @@
 class CatsController < ApplicationController
+  before_action :rightful_owner, only: [:edit, :update]
+
   def index
     @cats = Cat.all
     render :index
@@ -21,6 +23,7 @@ class CatsController < ApplicationController
   
   def create
     @cat = Cat.new(cat_params)
+    @cat.user_id = current_user.id
     
     if @cat.save
       redirect_to cat_url(@cat)
@@ -28,18 +31,20 @@ class CatsController < ApplicationController
       render :new
     end
   end
+  
+  def rightful_owner
+    @cat = current_user.cats.find_by(id: params[:id]) 
 
-  def edit
-    @cat = Cat.find_by(id: params[:id])
-    if @cat
-      render :edit
-    else
-      redirect_to cats_url
+    unless @cat
+      redirect_to cat_url(params[:id])
     end
   end
 
+  def edit
+    render :edit 
+  end
+
   def update
-    @cat = Cat.find_by(id: params[:id])
     if @cat.update_attributes(cat_params)
       redirect_to cat_url(@cat)
     else
@@ -50,7 +55,15 @@ class CatsController < ApplicationController
   def destroy
     @cat = Cat.find_by(id: params[:id])
 
-    @cat.destroy
+    unless @cat
+      redirect_to cats_url
+    end
+
+    if @cat.user_id == current_user.id
+      @cat.destroy
+    else
+      redirect_to cat_url(@cat)
+    end
   end
 
   private

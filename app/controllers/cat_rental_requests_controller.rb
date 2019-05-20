@@ -1,4 +1,6 @@
 class CatRentalRequestsController < ApplicationController
+  before_action :rightful_owner, only: [:approve, :deny]
+
   def new
     @request = CatRentalRequest.new
     @cats = Cat.all
@@ -17,16 +19,24 @@ class CatRentalRequestsController < ApplicationController
     end
   end
 
-  def approve
-    @request = CatRentalRequest.find_by(id: params[:id])
+  def rightful_owner
+    @request = CatRentalRequest.find(params[:id])
+    
+    unless @request
+      redirect_to cats_url
+    end
 
+    unless @request.cat.user_id == current_user.id
+      redirect_to cat_url(@request.cat_id)
+    end
+  end
+
+  def approve
     @request.approve!
     redirect_to cat_url(@request.cat_id)
   end
 
   def deny
-    @request = CatRentalRequest.find_by(id: params[:id])
-
     @request.deny!
     redirect_to cat_url(@request.cat_id)
   end
