@@ -10,9 +10,9 @@
   <div>
     <label for="cat">Cat</label>
     <select id="cat" name="request[cat_id]">
-      <option disabled <%= "selected" unless params[:cat_id] || request_exist %>>--Select Cat--</option>
+      <option disabled <%= "selected" unless request_exist || params[:cat_id].to_i == 0 %>>--Select Cat--</option>
       <% cats.each do |cat| %>
-        <option value="<%= cat.id %>" <%= "selected" if params[:cat_id] == cat.id || request.cat_id == cat.id %>> <%= cat.name %> </option>
+        <option value="<%= cat.id %>" <%= "selected" if params[:cat_id].to_i == cat.id || request.cat_id == cat.id %>> <%= cat.name %> </option>
       <% end %>
     </select>
   </div>

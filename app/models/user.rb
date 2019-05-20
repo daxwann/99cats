@@ -12,6 +12,12 @@ class User < ApplicationRecord
     foreign_key: :user_id,
     class_name: :Cat,
     dependent: :destroy
+
+  has_many :requests,
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: :CatRentalRequest,
+    dependent: :destroy
   
   def self.find_by_credentials(user_params)
     user = User.find_by(username: user_params[:username])
