@@ -3,7 +3,7 @@ class CatRentalRequestsController < ApplicationController
 
   def new
     @request = CatRentalRequest.new
-    @cats = Cat.all
+    @cats = Cat.includes(:rental_requests).all
 
     render :new
   end
@@ -11,7 +11,7 @@ class CatRentalRequestsController < ApplicationController
   def create
     @request = CatRentalRequest.new(request_params)
     @request.user_id = current_user.id
-    @cats = Cat.all
+    @cats = Cat.includes(:rental_requests).all
 
     if @request.save
       redirect_to cat_url(@request.cat_id)
@@ -44,7 +44,7 @@ class CatRentalRequestsController < ApplicationController
 =begin
   def edit
     @request = CatRentalRequest.find_by(id: params[:id])
-    @cats = Cat.all
+    @cats = Cat.includes(:rental_requests).all
     
     render :edit
   end
