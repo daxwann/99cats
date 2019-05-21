@@ -1,8 +1,9 @@
 class CatRentalRequestsController < ApplicationController
+  before_action :require_login!, only: [:new, :create, :approve, :deny]
   before_action :rightful_owner, only: [:approve, :deny]
 
   def new
-    @request = CatRentalRequest.new
+    @request = CatRentalRequest.new(cat_id: params[:cat_id])
     @cats = Cat.includes(:requests).all
 
     render :new
@@ -16,30 +17,19 @@ class CatRentalRequestsController < ApplicationController
     if @request.save
       redirect_to cat_url(@request.cat_id)
     else
+      flash.now[:errors] = @request.errors.full_messages
       render :new
     end
   end
 
-  def rightful_owner
-    @request = CatRentalRequest.find(params[:id])
-    
-    unless @request
-      redirect_to cats_url
-    end
-
-    unless @request.cat.user_id == current_user.id
-      redirect_to cat_url(@request.cat_id)
-    end
-  end
-
   def approve
-    @request.approve!
-    redirect_to cat_url(@request.cat_id)
+    current_request.approve!
+    redirect_to cat_url(current_cat)
   end
 
   def deny
-    @request.deny!
-    redirect_to cat_url(@request.cat_id)
+    current_request.deny!
+    redirect_to cat_url(current_cat)
   end
 =begin
   def edit
@@ -71,5 +61,19 @@ class CatRentalRequestsController < ApplicationController
 
   def request_params
     params.require(:request).permit(:cat_id, :start_date, :end_date, :status)
+  end
+
+  def current_request
+    @request ||= CatRentalRequest.includes(:cat).find(params[:id])
+  end
+
+  def current_cat
+    current_request.cat
+  end
+
+  def rightful_owner
+    unless current_user.owns_cat?(current_cat)
+      redirect_to cat_url(current_cat)
+    end
   end
 end

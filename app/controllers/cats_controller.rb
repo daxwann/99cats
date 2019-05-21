@@ -1,5 +1,6 @@
 class CatsController < ApplicationController
-  before_action :rightful_owner, only: [:edit, :update]
+  before_action :require_login!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :rightful_owner, only: [:edit, :update, :destroy]
 
   def index
     @cats = Cat.all
@@ -28,6 +29,7 @@ class CatsController < ApplicationController
     if @cat.save
       redirect_to cat_url(@cat)
     else
+      flash.now[:errors] = @cat.errors.full_messages
       render :new
     end
   end
@@ -48,22 +50,14 @@ class CatsController < ApplicationController
     if @cat.update_attributes(cat_params)
       redirect_to cat_url(@cat)
     else
+      flash.now[:errors] = @cat.errors.full_messages
       render :edit
     end
   end
 
   def destroy
-    @cat = Cat.find_by(id: params[:id])
-
-    unless @cat
-      redirect_to cats_url
-    end
-
-    if @cat.user_id == current_user.id
-      @cat.destroy
-    else
-      redirect_to cat_url(@cat)
-    end
+    @cat.destroy
+    redirect_to cats_url
   end
 
   private

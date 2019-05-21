@@ -1,5 +1,14 @@
-<ul>
-  <% @cats.each do |cat| %>
-  <%= render "cat", cat: cat, show_link: cat_url(cat)%>
-  <% end %>
-</ul>
+<div>
+  <div>
+    <h1>Cats for Noncommittal Humans</h1>
+    <a href="<%= new_cat_url %>">
+      Add Cat
+      <i class="fa fa-plus" aria-hidden="true"></i>
+    </a>
+  </div>
+  <ul>
+    <% @cats.each do |cat| %>
+      <%= render "cat_li", cat: cat, show_link: cat_url(cat)%>
+    <% end %>
+  </ul>
+</div>
