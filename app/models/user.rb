@@ -19,18 +19,16 @@ class User < ApplicationRecord
     class_name: :CatRentalRequest,
     dependent: :destroy
   
-  def self.find_by_credentials(user_params)
-    user = User.find_by(username: user_params[:username])
+  def self.find_by_credentials(username, password)
+    user = User.find_by(username: username)
 
     return nil if user.nil?
       
-    password_digest = BCrypt::Password.new(user.password_digest) 
-
-    password_digest.is_password?(user_params[:password]) ? user : nil
+    user.is_password?(password) ? user : nil
   end
 
   def self.generate_session_token
-    SecureRandom::urlsafe_base64
+    SecureRandom::urlsafe_base64(16)
   end
 
   def valid_session_token?
@@ -54,5 +52,10 @@ class User < ApplicationRecord
   def password=(password)
     @password = password
     self.password_digest = BCrypt::Password.create(password)
+  end
+
+  def is_password?(password)
+    password_digest = BCrypt::Password.new(user.password_digest)
+    password_digest.is_password?(password)
   end
 end

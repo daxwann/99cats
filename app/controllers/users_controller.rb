@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :redirect_user 
+  before_action :redirect_user! 
 
   def new
     @user = User.new
@@ -12,6 +12,7 @@ class UsersController < ApplicationController
       self.login_user!
       redirect_to cats_url
     else
+      flash.now[:errors] = @user.errors.full_messages
       render :new
     end
   end

@@ -2,14 +2,17 @@ class SessionsController < ApplicationController
   before_action :redirect_user, only: [:new, :create]
 
   def new
-    @user = User.new
+    user = User.new
     render :new
   end
 
   def create
-    @user = User.find_by_credentials(session_params)
+    user = User.find_by_credentials(
+      params[:user][:username],
+      params[:user][:password]
+    )
 
-    if @user
+    if user
       self.login_user!
       redirect_to cats_url
     else
@@ -18,16 +21,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    if current_user
-      current_user.reset_session_token!
-      session[:session_token] = nil
-    end
+    logout_user!
     redirect_to new_session_url
-  end
-
-  private
-
-  def session_params
-    params.require(:user).permit(:username, :password)
   end
 end

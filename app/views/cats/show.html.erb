@@ -1,4 +1,4 @@
-<% requests = @cat.rental_requests %>
+<% requests = @cat.requests.includes(:requester) %>
 <% ordered_requests = requests.order('start_date') %>
 
 <h1><%= @cat.name %>
