@@ -1,67 +1,85 @@
-<% requests = @cat.requests.includes(:requester) %>
-<% ordered_requests = requests.order('start_date') %>
-
-<h1><%= @cat.name %>
-<table>
-  <tr>
-    <th>Attribute</th>
-    <th>Value</th>
-  </tr>
-  <tr>
-    <td>Age</td>
-    <td><%= @cat.age %></td>
-  </tr>
-  <tr>
-    <td>Birth Date</td>
-    <td><%= @cat.birth_date %></td>
-  </tr>
-  <tr>
-    <td>Color</td>
-    <td><%= @cat.color %></td>
-  </tr>
-  <tr>
-    <td>Sex</td>
-    <td><%= @cat.sex %></td>
-  </tr>
-</table>
-
-<h2>Rental Requests</h2>
-<% unless requests.empty? %>
-<table>
-  <tr>
-    <th>Start Date</th>
-    <th>End Date</th>
-    <th>Requester</th>
-    <th>Status</th>
-  </tr>
-  <% ordered_requests.each do |request| %>
-    <tr>
-      <td><%= request.start_date %></td>
-      <td><%= request.end_date %></td>
-      <td><%= request.requester.username %></td>
-      <td>
-        <% if current_user && request.pending? && request.cat.user_id == current_user.id %>
-          <form action="<%= approve_cat_rental_request_url(request) %>" method="POST">
-            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
-            <input type="submit" value="Approve">
-          </form>
-
-          <form action="<%= deny_cat_rental_request_url(request) %>" method="POST">
-            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
-            <input type="submit" value="Deny">
-          </form>
-        <% else %>
-          <%= request.status %>
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<% end %>
-
 <div>
-  <form action="<%= new_cat_rental_request_url %>" method="GET">
-    <input type="hidden" name="cat_id" value="<%= @cat.id %>">
-    <input type="submit" value="New Rental Request">
-  </form>
+  <!-- Cat profile -->
+  <div> 
+    <h1><%= @cat.name %></h1>
+    <img src="http://placekitten.com/g/400/500" alt="cat profile picture">
+
+    <table>
+      <tr>
+       <th>Attribute</th>
+       <th>Value</th>
+      </tr>
+      <tr>
+        <td>Age</td>
+        <td><%= @cat.age %></td>
+      </tr>
+      <tr>
+        <td>Birth Date</td>
+        <td><%= @cat.birth_date %></td>
+      </tr>
+      <tr>
+        <td>Color</td>
+        <td><%= @cat.color %></td>
+      </tr>
+      <tr>
+        <td>Sex</td>
+        <td><%= @cat.sex %></td>
+      </tr>
+    </table>
+    <% if @cat.user_id == current_user.id %>
+      <a href="<%= edit_cat_url(@cat) %>">Edit <%= @cat.name %></a>
+    <% end %>
+  </div>
+  <!-- Requests for cat-->
+  <div>
+    <h2>Rental Requests</h2>
+    <% requests = @cat.requests.includes(:requester) %>
+    <% ordered_requests = requests.order('start_date') %>
+
+    <% unless requests.empty? %>
+      <table>
+        <tr>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Requester</th>
+          <th>Status</th>
+        </tr>
+
+        <% ordered_requests.each do |req| %>
+          <tr>
+            <td><%= req.start_date %></td>
+            <td><%= req.end_date %></td>
+            <td><%= req.requester.username %></td>
+            <td>
+              <% if current_user && req.pending? && @cat.user_id == current_user.id %>
+                <form action="<%= approve_cat_rental_request_url(req) %>" method="POST">
+                  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
+                  <input type="submit" value="Approve">
+                </form>
+
+                <form action="<%= deny_cat_rental_request_url(req) %>" method="POST">
+                  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"> 
+                  <input type="submit" value="Deny">
+                </form>
+              <% else %>
+                <%= req.status %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+  <!-- New request -->
+  <% if logged_in? %>
+    <div>
+      <form action="<%= new_cat_rental_request_url %>" method="GET">
+        <input type="hidden" 
+          name="cat_id" 
+          value="<%= @cat.id %>">
+        <input type="submit" 
+          value="New Rental Request">
+      </form>
+    </div>
+  <% end %>
 </div>

@@ -2,6 +2,8 @@ class CatRentalRequest < ApplicationRecord
   validates :start_date, :end_date, presence: true
   validates :status, presence: true, inclusion: { in: %w(PENDING APPROVED DENIED), message: "%{value} is not a valid status" }
   validate :does_not_overlap_approved_request
+  validate :no_past_rental_dates
+  validate :start_before_end
 
   belongs_to :cat,
     primary_key: :id,
@@ -72,5 +74,14 @@ class CatRentalRequest < ApplicationRecord
       .where(cat_id: self.cat_id)
       .where.not('start_date > :end_date OR end_date < :start_date',
         start_date: self.start_date, end_date: self.end_date)
+  end
+
+  def start_before_end
+    errors[:start_date] << 'must come before end date' if self.start_date > self.end_date
+  end
+
+  def no_past_rental_dates
+    errors[:start_date] << 'must not be in the past' if self.start_date < Time.now
+    errors[:end_date] << 'must not be in the past' if self.end_date < Time.now
   end
 end
