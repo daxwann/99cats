@@ -26,7 +26,7 @@
         <td><%= @cat.sex %></td>
       </tr>
     </table>
-    <% if @cat.user_id == current_user.id %>
+    <% if current_user && @cat.user_id == current_user.id %>
       <a href="<%= edit_cat_url(@cat) %>">Edit <%= @cat.name %></a>
     <% end %>
   </div>
