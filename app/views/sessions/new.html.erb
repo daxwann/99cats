@@ -4,10 +4,7 @@
   <%= render "shared/errors" %>
 
   <form action="<%= session_url %>" method="POST">
-    <input type="hidden" 
-     name="authenticity_token" 
-     value="<%= form_authenticity_token %>">
-
+    <%= auth_token %>
     <div>
       <label for="username">Username</label>
       <input type="text" 
@@ -25,7 +22,8 @@
     </div>
 
     <div>
-      <input type="submit" value="Log In">
+      <input type="submit" 
+        value="Log In">
     </div>
   </form>
 </div>
